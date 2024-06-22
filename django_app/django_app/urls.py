@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import path,include
 
 urlpatterns = [
-    path('kurs/', include('djangoapp.urls')),
+    path('kurslar/', include('djangoapp.urls')),
     path('', include('pages.urls')),
     path('admin/', admin.site.urls),
 ]

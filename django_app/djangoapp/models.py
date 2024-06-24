@@ -8,7 +8,7 @@ class Course(models.Model):
     imageUrl = models.CharField(max_length=50, blank=False)
     date = models.DateField()
     isActive = models.BooleanField()
-    slug = models.SlugField(default="",null=False, unique=True, db_index=True)
+    slug = models.SlugField(default="",blank=True,editable=False, null=False, unique=True, db_index=True)
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
@@ -16,7 +16,7 @@ class Course(models.Model):
 
 
     def __str__(self):
-        return f"{self.title} {self.date}"
+        return f"{self.title}"
     
 class Category(models.Model):
     name = models.CharField(max_length=40)

@@ -1,12 +1,13 @@
 from datetime import date,datetime
-from django.shortcuts import redirect, render
-from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
+from django.shortcuts import get_object_or_404, redirect, render
+from django.http import Http404, HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.urls import reverse
+from .models import Course,Category
 
 data = {
     "programlama" : "programlama kategorisine ait kurslar",
     "web-gelistirme" : "web geliştirme kategorisine ait kurslar",
-    "mobil" : "mobil kategorisine ait kurslar",
+    "mobil" : "mobil kategorisine ait kurslar"
 }
 
 db = {
@@ -46,8 +47,8 @@ db = {
 # http://127.0.0.1:8000/kurslar
 
 def index(request):
-    kurslar = [course for course in db["courses"] if course["isActive"] == True]
-    kategoriler = db["categories"]
+    kurslar = Course.objects.filter(isActive=1)
+    kategoriler = Category.objects.all()
 
     # for kurs in db["courses"]:
     #     if kurs["isActive"] == True:
@@ -59,8 +60,20 @@ def index(request):
     }
     )
 
-def details(request, kurs_adi):
-    return HttpResponse(f"{kurs_adi} detay sayfası")
+def details(request, slug):
+    course = get_object_or_404(Course, slug=slug)
+
+    """
+    try:
+        course = Course.objects.get(slug=slug)
+    except:
+        raise Http404()
+    """
+
+    context = {
+        'course' : course
+    } 
+    return render(request, 'courses/details.html', context)
 
 def getCoursesByCategory(request, category_name):
     try:
@@ -70,13 +83,13 @@ def getCoursesByCategory(request, category_name):
             'category_text' : category_text
         })
     except:
-        return HttpResponseNotFound("yanlış kategori seçimi")
+        return HttpResponseNotFound("yanlış kategori ismi seçimi")
     
 
 def getCoursesByCategoryId(request, category_id):
     category_list = list(data.keys())
     if (category_id > len(category_list)):
-        return HttpResponseNotFound("yanlış kategori seçimi")
+        return HttpResponseNotFound("yanlış kategori id seçimi")
     
     category_name = category_list[category_id - 1]
 

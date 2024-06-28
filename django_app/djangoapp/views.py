@@ -1,48 +1,8 @@
 from datetime import date,datetime
-from django.shortcuts import get_object_or_404, redirect, render
-from django.http import Http404, HttpResponse, HttpResponseNotFound, HttpResponseRedirect
-from django.urls import reverse
+from django.shortcuts import get_object_or_404, render
 from .models import Course,Category
+from django.core.paginator import Paginator
 
-data = {
-    "programlama" : "programlama kategorisine ait kurslar",
-    "web-gelistirme" : "web geliştirme kategorisine ait kurslar",
-    "mobil" : "mobil kategorisine ait kurslar"
-}
-
-db = {
-    "courses" : [
-        {
-            "title" : "javascript kursu",
-            "description" : "javascript kurs açıklaması",
-            "imageUrl" : "1.jpg",
-            "slug" : "javascript-kursu",
-            "date" : datetime.now(),
-            "isActive" : True
-        },
-        {
-            "title" : "python kursu",
-            "description" : "python kurs açıklaması",
-            "imageUrl" : "2.jpg",
-            "slug" : "python-kursu",
-            "date" : datetime.now(),
-            "isActive" : True
-        },
-        {
-            "title" : "web geliştirme kursu",
-            "description" : "web geliştirme kurs açıklaması",
-            "imageUrl" : "3.jpg",
-            "slug" : "web-gelistirme-kursu",
-            "date" : datetime.now(),
-            "isActive" : True
-        }
-    ],
-    "categories" : [
-        { "id": 1, "name": "programlama", "slug": "programlama"},
-        { "id": 2, "name": "web geliştirme", "slug": "web-gelistirme"},
-        { "id": 3, "name": "mobil uygulamalar", "slug": "mobil"},
-    ]
-}
 
 # http://127.0.0.1:8000/kurslar
 
@@ -69,11 +29,18 @@ def details(request, slug):
     return render(request, 'courses/details.html', context)
 
 def getCoursesByCategory(request, slug):
-    kurslar = Course.objects.filter(categories__slug=slug, isActive=True)
+    kurslar = Course.objects.filter(categories__slug=slug, isActive=True).order_by("title")
     kategoriler = Category.objects.all()
+
+    paginator = Paginator(kurslar, 2)
+    page = request.GET.get('page', 1)
+    page_obj = paginator.page(page)
+
+    print(page_obj.paginator.count)
+    print(page_obj.paginator.num_pages)
 
     return render(request, 'courses/index.html', {
         'categories' : kategoriler,
-        'courses' : kurslar,
+        'page_obj' : page_obj,
         'seciliKategori' : slug
     })

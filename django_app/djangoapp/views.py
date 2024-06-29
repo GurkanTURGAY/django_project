@@ -1,5 +1,7 @@
 from datetime import date,datetime
 from django.shortcuts import get_object_or_404, redirect, render
+
+from djangoapp.forms import CourseCreateForm
 from .models import Course,Category
 from django.core.paginator import Paginator
 
@@ -19,6 +21,22 @@ def index(request):
         'courses' : kurslar
     }
     )
+
+def create_course(request):
+    if request.method == "POST":
+        form = CourseCreateForm(request.POST)
+
+        if form.is_valid():
+            kurs = Course(
+                title=form.cleaned_data["title"],
+                description=form.cleaned_data["description"],
+                imageUrl=form.cleaned_data["imageUrl"],
+                slug=form.cleaned_data["slug"])
+            kurs.save()
+            return redirect("/kurslar")
+    else:
+        form = CourseCreateForm()
+    return render(request, "courses/create-course.html", {"form":form})
 
 def search(request):
     if "q" in request.GET and request.GET["q"] != "":

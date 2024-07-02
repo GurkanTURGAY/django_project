@@ -1,7 +1,7 @@
 from datetime import date,datetime
 from django.shortcuts import get_object_or_404, redirect, render
 
-from djangoapp.forms import CourseCreateForm
+from djangoapp.forms import CourseCreateForm, CourseEditForm
 from .models import Course,Category
 from django.core.paginator import Paginator
 
@@ -27,16 +27,40 @@ def create_course(request):
         form = CourseCreateForm(request.POST)
 
         if form.is_valid():
-            kurs = Course(
-                title=form.cleaned_data["title"],
-                description=form.cleaned_data["description"],
-                imageUrl=form.cleaned_data["imageUrl"],
-                slug=form.cleaned_data["slug"])
-            kurs.save()
+            form.save()
             return redirect("/kurslar")
     else:
         form = CourseCreateForm()
     return render(request, "courses/create-course.html", {"form":form})
+
+def course_list(request):
+    kurslar = Course.objects.all()
+
+    return render(request, 'courses/course-list.html', {
+        'courses' : kurslar
+    }
+    )
+
+def course_edit(request, id):
+    course = get_object_or_404(Course, pk=id)
+
+    if request.method == "POST":
+        form = CourseEditForm(request.POST,instance=course)
+        form.save()
+        return redirect("course_list")
+    else:
+        form = CourseEditForm(instance=course)
+
+    return render(request, 'courses/edit-course.html', {"form":form})
+
+def course_delete(request, id):
+    course = get_object_or_404(Course, pk=id)
+
+    if request.method =="POST":
+        course.delete()
+        return redirect("course_list")
+
+    return render(request, "courses/course-delete.html", {"course":course})
 
 def search(request):
     if "q" in request.GET and request.GET["q"] != "":

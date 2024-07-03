@@ -31,7 +31,7 @@ class CourseCreateForm(forms.Form):
 class CourseCreateForm(forms.ModelForm):
     class Meta:
         model = Course
-        fields = ('title','description', 'imageUrl', 'slug')
+        fields = ('title','description', 'image', 'slug')
         labels = {
             'title':"Kurs Başlığı",
             'description':"Kurs Açıklaması"
@@ -39,7 +39,6 @@ class CourseCreateForm(forms.ModelForm):
         widgets = {
             "title":forms.TextInput(attrs={"class":"form-control"}),
             "description":forms.Textarea(attrs={"class":"form-control"}),
-            "imageUrl":forms.TextInput(attrs={"class":"form-control"}),
             "slug":forms.TextInput(attrs={"class":"form-control"})
         }
         error_messages = {
@@ -54,7 +53,7 @@ class CourseCreateForm(forms.ModelForm):
 class CourseEditForm(forms.ModelForm):
     class Meta:
         model = Course
-        fields = ('title','description', 'imageUrl', 'slug','categories')
+        fields = ('title','description', 'image', 'slug','categories')
         labels = {
             'title':"Kurs Başlığı",
             'description':"Kurs Açıklaması"
@@ -62,7 +61,6 @@ class CourseEditForm(forms.ModelForm):
         widgets = {
             "title":forms.TextInput(attrs={"class":"form-control"}),
             "description":forms.Textarea(attrs={"class":"form-control"}),
-            "imageUrl":forms.TextInput(attrs={"class":"form-control"}),
             "slug":forms.TextInput(attrs={"class":"form-control"}),
             "categories": forms.SelectMultiple(attrs={"class":"form-control"})
         }
@@ -74,3 +72,6 @@ class CourseEditForm(forms.ModelForm):
                 "required": "Kurs Açıklaması Girmelisiniz."
             }
         }
+
+class UploadForm(forms.Form):
+    image = forms.ImageField()

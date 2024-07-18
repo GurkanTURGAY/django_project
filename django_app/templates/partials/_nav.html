@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg bg-primary navbar-dark">
     <div class="container">
-        <a href="{% url 'index' %}" class="navbar-brand">Course App</a>
+        <a href="{% url 'index' %}" class="navbar-brand">IHA App</a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar">
             <span class="navbar-toggler-icon"></span>
@@ -9,16 +9,14 @@
         <div class="collapse navbar-collapse" id="navbar">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
-                    <a href="{% url 'index' %}" class="nav-link">Kurslar</a>
+                    <a href="{% url 'index' %}" class="nav-link">Kiralanan İhalar</a>
                 </li>
-                {% if user.is_superuser %}
-                    <li class="nav-item">
-                        <a href="{% url 'create_course' %}" class="nav-link">Kurs Ekle</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{% url 'course_list' %}" class="nav-link">Kurs Tablosu</a>
-                    </li>
-                {% endif %}
+                <li class="nav-item">
+                    <a href="{% url 'iha_kirala' %}" class="nav-link">İha Kirala</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'iha_listesi' %}" class="nav-link">Üyelerin İHA kiralama kayıtları</a>
+                </li>
             </ul>
 
             <ul class="navbar-nav me-0">

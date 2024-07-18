@@ -8,12 +8,12 @@
         <div class="col-8">
             <div class="card-body">
                 <h5 class="card-title">
-                    <a href="{% url 'course_details' course.slug %}">
+                    Kiralayan Kişi: <a href="{% url 'course_details' course.slug %}">
                     {{ course.title|title }}
                     </a>
                 </h5>
-                <p class="card-text">{{ course.description|capfirst|truncatechars:40 }}</p>
-                <p>{{ course.date|date:"d F l"}}</p>
+                <p class="card-text">Kiralayan Ülke: {{ course.description|capfirst|truncatechars:40 }}</p>
+                <p>Kiralanan Tarih: {{ course.date|date:"d F l"}}</p>
             </div>
         </div>
     </div>

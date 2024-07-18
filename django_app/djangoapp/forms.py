@@ -31,45 +31,52 @@ class CourseCreateForm(forms.Form):
 class CourseCreateForm(forms.ModelForm):
     class Meta:
         model = Course
-        fields = ('title','description', 'image', 'slug')
+        fields = ('title', 'categories','description', 'image')
         labels = {
-            'title':"Kurs Başlığı",
-            'description':"Kurs Açıklaması"
+            'title':"İha'yı Kiralayacak Kişinin Adı:",
+            'description':"İhanın Menşei:",
+            'categories':"Kiralanacak İha(Marka/Model):",
+            'image':"Fotoğrafınızı yükleyin:"
         }
         widgets = {
             "title":forms.TextInput(attrs={"class":"form-control"}),
-            "description":forms.Textarea(attrs={"class":"form-control"}),
+            "description":forms.TextInput(attrs={"class":"form-control"}),
             "slug":forms.TextInput(attrs={"class":"form-control"})
         }
         error_messages = {
             "title": {
-                "required": "Kurs Başlığı Girmelisiniz."
+                "required": "İha'yı Kiralayacak Kişinin İsmini Girmelisiniz."
             },
             "description":{
-                "required": "Kurs Açıklaması Girmelisiniz."
+                "required": "İhanın Markasını Girmelisiniz."
+            },
+            "categories":{
+                "required": "Kiralanacak İhayı Seçmelisiniz."
             }
         }
 
 class CourseEditForm(forms.ModelForm):
     class Meta:
         model = Course
-        fields = ('title','description', 'image', 'slug','categories')
+        fields = ('title','description', 'image','categories')
         labels = {
-            'title':"Kurs Başlığı",
-            'description':"Kurs Açıklaması"
+            'title':"İha'yı Kiralayacak Kişinin Adı:",
+            'description':"İhanın Menşei:",
+            'categories':"Kiralanacak İha(Marka/Model):",
+            'image':"Fotoğrafınızı yükleyin:"
         }
         widgets = {
             "title":forms.TextInput(attrs={"class":"form-control"}),
-            "description":forms.Textarea(attrs={"class":"form-control"}),
+            "description":forms.TextInput(attrs={"class":"form-control"}),
             "slug":forms.TextInput(attrs={"class":"form-control"}),
             "categories": forms.SelectMultiple(attrs={"class":"form-control"})
         }
         error_messages = {
             "title": {
-                "required": "Kurs Başlığı Girmelisiniz."
+                "required": "İha'yı Kiralayacak Kişinin İsmini Girmelisiniz."
             },
             "description":{
-                "required": "Kurs Açıklaması Girmelisiniz."
+                "required": "İhanın Markasını Girmelisiniz."
             }
         }
 

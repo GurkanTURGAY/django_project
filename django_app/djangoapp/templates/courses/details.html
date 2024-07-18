@@ -7,7 +7,7 @@
 {% endblock css_files %}
 
 {% block page_title %}
-    {{ course.title }}
+    Ayrıntılı Kişi Dosyası
 {% endblock page_title %}
 
 {% block content %}
@@ -17,9 +17,8 @@
             <img class="img-fluid rounded" src="{{course.image.url}}" alt="">
         </div>
         <div class="col-8">
-            <h1 class="h3">{{ course.title }}</h1>
-            <p> {{ course.description}} </p>
-            <p>sss</p>
+            <h1 class="h3">Kiralayan Kişi: {{ course.title }}</h1>
+            <p>Kiralayan Ülke: {{ course.description}} </p>
         </div>
     </div>
 </div>

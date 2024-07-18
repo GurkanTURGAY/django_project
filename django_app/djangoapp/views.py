@@ -24,51 +24,53 @@ def index(request):
 def isAdmin(user):
     return user.is_superuser
 
-@user_passes_test(isAdmin)
+@login_required()
 def create_course(request):
     if request.method == "POST":
         form = CourseCreateForm(request.POST, request.FILES)
 
         if form.is_valid():
             form.save()
-            return redirect("/kurslar")
+            return redirect("/ihalar")
     else:
         form = CourseCreateForm()
-    return render(request, "courses/create-course.html", {"form":form})
+    return render(request, "courses/iha-kirala.html", {"form":form})
 
-@user_passes_test(isAdmin)
+@login_required()
 def course_list(request):
-    kurslar = Course.objects.all()
+    kiralayan = Course.objects.all()
+    ihalar = Category.objects.all()
 
-    return render(request, 'courses/course-list.html', {
-        'courses' : kurslar
+    return render(request, 'courses/iha-listesi.html', {
+        'courses' : kiralayan,
+        'category' : ihalar,
     }
     )
 
-@user_passes_test(isAdmin)
+@login_required()
 def course_edit(request, id):
     course = get_object_or_404(Course, pk=id)
 
     if request.method == "POST":
         form = CourseEditForm(request.POST, request.FILES, instance=course)
         form.save()
-        return redirect("course_list")
+        return redirect("iha_listesi")
     else:
         form = CourseEditForm(instance=course)
 
-    return render(request, 'courses/edit-course.html', {"form":form})
+    return render(request, 'courses/iha-kira-edit.html', {"form":form})
 
-@user_passes_test(isAdmin)
+@login_required()
 def course_delete(request, id):
     course = get_object_or_404(Course, pk=id)
 
     if request.method =="POST":
         course.delete()
-        return redirect("course_list")
+        return redirect("iha_listesi")
 
-    return render(request, "courses/course-delete.html", {"course":course})
+    return render(request, "courses/iha-delete.html", {"course":course})
 
-@user_passes_test(isAdmin)
+@login_required()
 def upload(request):
     if request.method == "POST":
         form = UploadForm(request.POST, request.FILES)
@@ -82,14 +84,14 @@ def upload(request):
         form = UploadForm()
     return render(request,'courses/upload.html',{"form":form})
     
-
+@login_required()
 def search(request):
     if "q" in request.GET and request.GET["q"] != "":
         q = request.GET["q"]
         kurslar = Course.objects.filter(isActive=True,title__contains=q).order_by("title")
         kategoriler = Category.objects.all()
     else:
-        return redirect("/kurslar")
+        return redirect("iha_listesi")
 
     return render(request, 'courses/search.html', {
         'categories' : kategoriler,

@@ -1,5 +1,5 @@
 <div class="list-group">
-    <a href="/kurslar" class="list-group-item list-group-item-action">Tüm Kategoriler</a>
+    <a href="/ihalar" class="list-group-item list-group-item-action">Kiralanan İhalar</a>
     {% for category in categories %}
         <a href="{% url 'courses_by_category' category.slug %}"
         class="list-group-item list-group-item-action {% if seciliKategori == category.slug %}active{% endif %}">
